@@ -238,7 +238,7 @@ namespace Diva.Wifi
 
         private string GetRegionManagementForm(Environment env)
         {
-            return m_WebApp.ReadFile(env, "server-admin-form.html", env.Data);
+            return m_WebApp.ReadFile(env, "region-form.html", env.Data);
         }
 
     }

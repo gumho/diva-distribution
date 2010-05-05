@@ -75,9 +75,8 @@ namespace Diva.Wifi
 
             m_WebApp = webApp;
 
-            // Read config
-            IConfig appConfig = config.Configs[configName];
-            m_ServerAdminPassword = appConfig.GetString("ServerAdminPassword", "secret");
+            m_ServerAdminPassword = webApp.RemoteAdminPassword;
+            m_log.DebugFormat("[Services]: RemoteAdminPassword is {0}", m_ServerAdminPassword);
 
             // Create the necessary services
             m_UserAccountService = new UserAccountService(config);
@@ -470,8 +469,13 @@ namespace Diva.Wifi
                 //FIXME: don't hardcode url, get it from m_GridService
                 //TODO: check if server is actually running first
                 //TODO: add support for shutdown message parameter from html form
-                string url = "localhost:9000";
+                string url = "http://localhost:9000";
                 Hashtable hash = new Hashtable();
+                if (m_ServerAdminPassword == null)
+                {
+                    m_log.Debug("[RegionManagementShutdownPostRequest] No remote admin password was set in .ini file");
+                }
+
                 hash["password"] = m_ServerAdminPassword;
                 IList paramList = new ArrayList();
                 paramList.Add(hash);
@@ -504,7 +508,7 @@ namespace Diva.Wifi
             {
                 List<GridRegion> regions = m_GridService.GetRegionsByName(UUID.Zero, "", 200);
                 env.Session = sinfo;
-                env.Data = Objectify(regions);
+                //env.Data = Objectify(regions);
                 env.Flags = StateFlags.IsLoggedIn | StateFlags.IsAdmin | StateFlags.RegionManagementForm;
                 return PadURLs(env, sinfo.Sid, m_WebApp.ReadFile(env, "index.html"));
             }
