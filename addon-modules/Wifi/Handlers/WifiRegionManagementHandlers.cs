@@ -16,7 +16,6 @@ using OpenSim.Framework;
 using OpenSim.Framework.Servers.HttpServer;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.AuthenticationService;
-using OpenSim.Services.UserAccountService;
 using OpenSim.Services.InventoryService;
 
 using Diva.Wifi.WifiScript;
@@ -26,16 +25,16 @@ namespace Diva.Wifi
 {
 
     /// <summary>
-    /// The handler for the HTTP GET method on the resource /wifi/admin/server
+    /// The handler for the HTTP GET method on the resource /wifi/admin/regions
     /// </summary>
-    public class WifiServerManagementGetHandler : BaseStreamHandler
+    public class WifiRegionManagementGetHandler : BaseStreamHandler
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private WebApp m_WebApp;
 
-        public WifiServerManagementGetHandler(WebApp webapp) :
-            base("GET", "/wifi/admin/server")
+        public WifiRegionManagementGetHandler(WebApp webapp) :
+            base("GET", "/wifi/admin/regions")
         {
             m_WebApp = webapp;
         }
@@ -57,7 +56,7 @@ namespace Diva.Wifi
             string result = string.Empty;
             if (resource.Equals("/") || resource.Equals(string.Empty))
                 // client invoked /wifi/admin/users/ with no further parameters
-                result = m_WebApp.Services.ServerManagementGetRequest(env);
+                result = m_WebApp.Services.RegionManagementGetRequest(env);
 
             return WifiUtils.StringToBytes(result);
 
@@ -66,16 +65,16 @@ namespace Diva.Wifi
     }
 
     /// <summary>
-    /// The handler for the HTTP POST method on the resource /wifi/admin/users
+    /// The handler for the HTTP POST method on the resource /wifi/admin/regions
     /// </summary>
-    public class WifiServerManagementPostHandler : BaseStreamHandler
+    public class WifiRegionManagementPostHandler : BaseStreamHandler
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private WebApp m_WebApp;
 
-        public WifiServerManagementPostHandler(WebApp webapp) :
-            base("POST", "/wifi/admin/server")
+        public WifiRegionManagementPostHandler(WebApp webapp) :
+            base("POST", "/wifi/admin/regions")
         {
             m_WebApp = webapp;
         }
@@ -110,7 +109,7 @@ namespace Diva.Wifi
                 }
                 else if (resource.StartsWith("/shutdown"))
                 {
-                    result = m_WebApp.Services.ServerManagementShutdownPostRequest(env);
+                    result = m_WebApp.Services.RegionManagementShutdownPostRequest(env);
                 }
 
                 return WifiUtils.StringToBytes(result);
@@ -118,7 +117,7 @@ namespace Diva.Wifi
             }
             catch (Exception e)
             {
-                m_log.DebugFormat("[USER ACCOUNT POST HANDLER]: Exception {0}", e);
+                m_log.DebugFormat("[REGION MANAGEMENT POST HANDLER]: Exception {0}", e);
             }
 
             return WifiUtils.FailureResult();
