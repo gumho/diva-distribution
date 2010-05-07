@@ -512,12 +512,6 @@ namespace Diva.Wifi
 
                 List<GridRegion> regions = m_GridService.GetRegionsByName(UUID.Zero, "", 200);
 
-
-                //temporary test
-                //GridRegion g = new GridRegion();
-                //g.RegionName = "this is the region name";
-                //regions.Add(g);
-
                 m_log.DebugFormat("[RegionManagementGetRequest]: # of Region {0}", regions.Count);
                 regions.ForEach(delegate(GridRegion gg)
                 {
@@ -525,7 +519,7 @@ namespace Diva.Wifi
                 });
 
                 env.Session = sinfo;
-                //env.Data = Objectify(regions);
+                env.Data = Objectify(regions);
                 env.Flags = StateFlags.IsLoggedIn | StateFlags.IsAdmin | StateFlags.RegionManagementForm;
                 return PadURLs(env, sinfo.Sid, m_WebApp.ReadFile(env, "index.html"));
             }
