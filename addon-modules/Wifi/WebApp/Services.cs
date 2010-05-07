@@ -500,15 +500,26 @@ namespace Diva.Wifi
 
         public string RegionManagementGetRequest(Environment env)
         {
-            m_log.DebugFormat("[WebApp]: RegionManagementGetRequest");
+            m_log.DebugFormat("[Services]: RegionManagementGetRequest()");
             Request request = env.Request;
 
             SessionInfo sinfo;
             if (TryGetSessionInfo(request, out sinfo) && (sinfo.Account.UserLevel >= 200))
-            {
+            {   
+                //temporary test
+                //List<UserAccount> ua = new List<UserAccount>();
+                //ua.Add(new UserAccount(UUID.Zero, "ryan", "hsu", "ueou@ueu"));
+
                 List<GridRegion> regions = m_GridService.GetRegionsByName(UUID.Zero, "", 200);
+
+                m_log.DebugFormat("[RegionManagementGetRequest]: # of Region {0}", regions.Count);
+                regions.ForEach(delegate(GridRegion gg)
+                {
+                    m_log.DebugFormat("[RYAN Test] {0}", gg.RegionName);
+                });
+
                 env.Session = sinfo;
-                //env.Data = Objectify(regions);
+                env.Data = Objectify(regions);
                 env.Flags = StateFlags.IsLoggedIn | StateFlags.IsAdmin | StateFlags.RegionManagementForm;
                 return PadURLs(env, sinfo.Sid, m_WebApp.ReadFile(env, "index.html"));
             }
