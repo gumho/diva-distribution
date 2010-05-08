@@ -506,16 +506,12 @@ namespace Diva.Wifi
             SessionInfo sinfo;
             if (TryGetSessionInfo(request, out sinfo) && (sinfo.Account.UserLevel >= 200))
             {   
-                //temporary test
-                //List<UserAccount> ua = new List<UserAccount>();
-                //ua.Add(new UserAccount(UUID.Zero, "ryan", "hsu", "ueou@ueu"));
-
                 List<GridRegion> regions = m_GridService.GetRegionsByName(UUID.Zero, "", 200);
 
-                m_log.DebugFormat("[RegionManagementGetRequest]: # of Region {0}", regions.Count);
+                m_log.DebugFormat("[Services]: There are {0} regions", regions.Count);
                 regions.ForEach(delegate(GridRegion gg)
                 {
-                    m_log.DebugFormat("[RYAN Test] {0}", gg.RegionName);
+                    m_log.DebugFormat("[Services] {0}", gg.RegionName);
                 });
 
                 env.Session = sinfo;
